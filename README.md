@@ -14,6 +14,12 @@ pip install docopt pdfminer.six numpy pandas
 ```
 
 
+If you're on Mac OS X, The `sed` will return some error when use `sed -i`, you should use [`Homebrew`](http://brew.sh/) download `gnu-sed` to replace default `sed`.
+
+```
+brew install gnu-sed --with-default-names
+```
+
 ## Usage
 
 ```
