@@ -35,7 +35,7 @@ import pandas as pd
 
 if arguments['--txt'] == True:
     os.system(
-        './freeq.py -i %s -o .book_freeq.csv' %
+        'freeq -i %s -o .book_freeq.csv' %
         arguments['<txtname>']
     )
 elif arguments['--pdf'] == True:
@@ -66,15 +66,15 @@ elif arguments['--pdf'] == True:
         with open('.book.txt', 'w') as book:
             book.write('%s' % str)
     convert_pdf_to_txt(arguments['<pdfname>'])
-    os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
+    os.system('freeq -i .book.txt -o .book_freeq.csv')
 
 elif arguments['--mobi'] == True:
     os.system('ebook-convert %s .book.txt' %arguments['<mobiname>'])
-    os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
+    os.system('freeq -i .book.txt -o .book_freeq.csv')
 
 else:
     os.system('ebook-convert %s .book.txt' %arguments['<epubname>'])
-    os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
+    os.system('freeq -i .book.txt -o .book_freeq.csv')
 
 os.system("sed -i 's/^ *//g' .book_freeq.csv")
 os.system("sed -i 's/ /,/g' .book_freeq.csv")
@@ -83,7 +83,7 @@ df_book = pd.read_csv('.book_freeq.csv', names=['Freq', 'Word'])
 
 if arguments['--mastered'] == False:
     df_coca = pd.read_csv(
-        'COCA_top5000.csv'
+        '/Users/Scott/Documents/GitHubRepoes/advanced_freeq/COCA_top5000.csv'
     ).loc[:,['Rank','Word']]
     df_freq = df_book[~df_book['Word'].isin(df_coca['Word'].iloc[:1000])]
     df_freq.to_csv('%s' % arguments['<output>'], index = None)
