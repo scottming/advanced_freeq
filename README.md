@@ -4,13 +4,13 @@
 Use Python 3.4+ to get the lastest version of advanced_freeq
 
 ```
-git clone https://github.com/scottming/advanced_freeq.git
+$ git clone https://github.com/scottming/advanced_freeq.git
 ```
 
 Decorator packages are required for advanced_freeq.py.
 
 ```
-pip install docopt pdfminer.six numpy pandas
+$ pip install docopt pdfminer.six numpy pandas
 ```
 
 ### OS X
@@ -18,19 +18,19 @@ pip install docopt pdfminer.six numpy pandas
 If you're on Mac OS X, The `sed` will return some error when use `sed -i`, you should use [`Homebrew`](http://brew.sh/) download `gnu-sed` to replace default `sed`.
 
 ```
-brew install gnu-sed --with-default-names
+$ brew install gnu-sed --with-default-names
 ```
 
 Install Calibre
 
 ```
-brew cask install calibre
+$ brew cask install calibre
 ```
 
 ### Debian
 
 ```
-sudo apt-get install calibre
+$ sudo apt-get install calibre
 ```
 
 ## Usage
