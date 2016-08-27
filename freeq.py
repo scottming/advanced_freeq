@@ -10,7 +10,7 @@ from collections import Counter
 __all__ = ['WordFinder', 'Book']
 
 lemmas = {}
-with open('/home/scott/Documents/freeq/lemmas.txt') as fin:
+with open('lemmas.txt') as fin:
     for line in fin:
         line = line.strip()
         headword = line.split('\t')[0]
