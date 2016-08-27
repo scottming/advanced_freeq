@@ -1,0 +1,371 @@
+ 
+
+ 
+
+1
+
+IT-SC book: Core Python Programming 
+
+Core Python Programming 
+
+Wesley J. Chun  
+Publisher: Prentice Hall PTR  
+First Edition December 14, 2000 
+ISBN: 0-13-026036-3, 816 pages  
+
+  
+
+ 
+
+ 
+
+2 
+
+ 
+
+ 
+
+IT-SC book: Core Python Programming 
+
+Review 
+
+New to Python? This is the developer's guide to Python development! 
+
+Learn  the core features of Python as well as advanced  topics such as regular expressions, 
+multithreaded  programming,  Web/Internet  and  network  development,  GUI  development 
+with Tk(inter) and more 
+
+Also includes features found in the new Python 1.6 and 2.0 releases 
+
+CD-ROM:  Complete  Python  distributions  (source  code,  documentation,  and  various 
+binaries) plus all example scripts in the book 
+
+Python  is  an  Internet  and  systems  programming  language  that  is  soaring  in  popularity  in 
+today's  fast-paced  software  development  environment,  and  no  wonder:  it's  simple  (yet 
+robust),  object-oriented  (yet  can  be  used  as  a  procedural  language),  extensible,  scalable 
+and features an easy to learn syntax that is clear and concise. Python combines the power 
+of  a  compiled  object  language  like  Java  and  C++  with  the  ease  of  use  and  rapid 
+development  time of a scripting  language.  In  fact,  its syntax  is so easy  to understand  that 
+you  are more  likely  to  pick  it  up  faster  than  any  of  the  other  popular  scripting  languages 
+in use today!  
+
+ 
+
+In  Core  Python  Programming,  Internet  software  engineer  and  technical  trainer  Wesley 
+Chun  provides  intermediate  and  experienced  developers  all  they  need  to  know  to  learn 
+Python-fast. Like  all Core  Series  books, Core Python Programming  delivers  hundreds  of 
+industrial-strength  code  snippets  and  examples,  all  targeted  at  professional  developers 
+who  want  to  leverage  their  existing  skills!  In  particular,  Core  Python  Programming 
+presents  numerous  interactive  examples  that  can  be  entered  into  the  Python  interpreter 
+right  in  front  of  you!  Finally,  we  present  a  chapter  that  shows  you  step-by-step  how  to 
+extend Python using C or C++.  
+
+Python syntax and style 
+
+Development and Run-time Environments 
+
+Objects and Python memory management 
+
+Standard data types, methods, and operators 
+
+Loops and conditionals 
+
+ 
+
+3
+
+IT-SC book: Core Python Programming 
+
+Files and Input/Output 
+
+Exceptions and error handling 
+
+Functions, scope, arguments, and functional programming 
+
+Importing modules and module attributes 
+
+Object-oriented Programming with classes, methods, and instances 
+
+Callable Objects 
+
+Extending Python 
+
+Coverage  of 
+library  and  client-server  application 
+the  Python  standard  module 
+development  includes  comprehensive  introductions  to  the  following  topics  in  Python 
+programming:  
+
+Regular expressions 
+
+TCP/IP and UDP/IP Network programming using sockets 
+
+Operating system interface 
+
+GUI development with Tk using Tkinter 
+
+Multithreaded programming 
+
+Interactive Web/CGI/Internet applications 
+
+Executing code in a restricted environment 
+
+Inheritance, type emulation, operator overloading, and delegation in an OOP environment 
+
+Finally,  we  provide  an  introduction  to  the  new  features  introduced  in  Python  1.6.  These 
+include Unicode  string  support,  the  new  function  invocation  syntax which  lets  the  caller 
+provide  a  tuple  of  positional  arguments  and/or  a  dictionary  of  keyword  arguments,  and 
+the  new  string methods. We  also  provide  a  glimpse  into  features  that will  only  be  found 
+in the newer 2.0 release.  
+
+Every Core Series book:  
+
+DEMONSTRATES how to write commercial-quality code 
+
+FEATURES dozens of programs and examples! 
+
+FOCUSES on the features and functions most important to real developers 
+
+PROVIDES objective, unbiased coverage of cutting-edge technologies-no 
+
+4 
+
+ 
+
+IT-SC book: Core Python Programming 
+
+hype! 
+
+Core Python Programming delivers:  
+
+Coverage of the core parts of the Python language 
+
+Real-world  insights  for  developing  Web/Internet,  network,  multithreaded  and  GUI 
+applications 
+
+Tables and charts detailing Python modules, built-in functions, operators, and attributes 
+
+Code  snippets  to  try  live  with  Python's  interactive  interpreter,  hammering  the  concepts 
+home 
+
+Extensive code examples-including several complete sample applications 
+
+CD-ROM includes complete Python source code and documentation distributions for 
+Unix/Linux along with binaries for Windows and Macintosh platforms plus source 
+code for all examples in the book. 
+ 
+
+ 
+
+5
+
+IT-SC book: Core Python Programming 
+
+Library of Congress Cataloging-in-Publication Date 
+
+Chun, Wesley 
+
+Core python / Wesley. Chun. 
+
+p. cm. 
+
+Includes bibliographical references and index. 
+
+ISBN 0-13-026036-3 
+
+1. Python (Computer program language) I. Title 
+
+QA76.73.P98 C48 2000 
+
+005.13'3--dc21 00-047856 
+
+6 
+
+ 
+
+IT-SC book: Core Python Programming 
+
+Copyright Information 
+
+© 2001 Prentice Hall PTR 
+
+Prentice-Hall, Inc 
+
+Upper Saddle River, NJ 07458 
+
+The publisher offers discounts on this book when ordered in bulk quantities. 
+
+For more information, contact 
+
+Corporate Sales Department, 
+
+Prentice Hall PTR 
+
+One Lake Street 
+
+Upper Saddle River, NJ 07458 
+
+Phone: 800-382-3419; FAX: 201-236-7141 
+
+E-mail (Internet): corpsales@prenhall.com 
+
+All  products  or  services  mentioned  herein  are  the  trademarks  or  service  marks  of  their 
+respective companies or organizations. 
+
+All rights reserved. No part of this book may be reproduced, in any form or by any means, 
+without permission in writing from the publisher Printed in the United States of America 
+
+10 9 8 7 6 5 4 3 2 1 
+
+Prentice-Hall International (UK) Limited, London 
+
+Prentice-Hall of Australia Pty. Limited, Sydney 
+
+Prentice-Hall Canada Inc., Toronto 
+
+Prentice-Hall Hispanoamericana, S.A., Mexico 
+
+Prentice-Hall of India Private Limited, New Delhi 
+
+Prentice-Hall of Japan, Inc., Tokyo 
+
+Pearson Education P.T.E., Ltd. 
+
+To my parents, 
+
+who taught me that everybody is different. 
+
+ 
+
+7
+
+IT-SC book: Core Python Programming 
+
+And to my wife, 
+
+who lives with someone who is different. 
+
+8 
+
+ 
+
+IT-SC book: Core Python Programming 
+
+Table of Contents 
+  
+Welcome to Python! 
+   Style:Technical, Yet Easy Reading 
+   Author's Experience with Python 
+   Book Contents 
+   Part I : Core Python 
+   Chapter 1 —Welcome to Python! 
+   Chapter 2 —Getting Started 
+   Chapter 3 —Syntax and Style 
+   Chapter 4 —Python Objects 
+   Chapter 5 —Numbers 
+   Chapter 6 —Sequences: Strings, Lists, and Tuples 
+   Chapter 7 —Dictionaries 
+   Chapter 8 —Conditionals and Loops 
+   Chapter 9 —Files and Input/Output 
+   Chapter 10 —Errors and Exceptions 
+   Chapter 11 —Functions 
+   Chapter 12 —Modules 
+   Chapter 13 —Classes and OOP 
+   Chapter 14 —Execution Environment 
+   Part II : Advanced Topics 
+   Chapter 15 —Regular Expressions 
+   Chapter 16 —Network Programming with Sockets 
+   Chapter 17 —Multithreaded Programming 
+   Chapter 18 —GUI Programming with Tkinter 
+   Chapter 19 —Web Programming 
+   Chapter 20 —Extending Python 
+   Optional Sections 
+   Conventions 
+   Book Support 
+ 
+Acknowledgements 
+ 
+I: CORE PYTHON 
+ 
+1. Welcome to Python! 
+   What Is Python? 
+   History of Python 
+   Features of Python 
+   Obtaining Python 
+   Obtaining Python 
+   Installing Python 
+   Running Python 
+   Python Documentation 
+   Comparing Python 
+   JPython and Some Nomenclature 
+   Exercises 
+ 
+2. Getting Started 
+   Program Output, the print Statement, and "Hello World!" 
+   Program Input and the raw_input() Built-in Function 
+
+ 
+
+9
+
+IT-SC book: Core Python Programming 
+
+   Comments 
+   Operators 
+   Variables and Assignment 
+   Numbers 
+   Strings 
+   Lists and Tuples 
+   Dictionaries 
+   Code Blocks Use Indentation 
+   if Statement 
+   while Loop 
+   for Loop and the range() Built-in Function 
+   Files and the open() Built-in Function 
+   Errors and Exceptions 
+   Functions 
+   Classes 
+   Modules 
+   Exercises 
+ 
+3. Syntax and Style 
+   Statements and Syntax 
+   Variable Assignment 
+   Identifiers 
+   Basic Style Guidelines 
+   Memory Management 
+   First Python Application 
+   Exercises 
+ 
+4. Python Objects 
+   Python Objects 
+   Standard Types 
+   Other Built-in Types 
+   Internal Types 
+   Standard Type Operators 
+   Standard Type Built-in Functions 
+   Categorizing the Standard Types 
+   Unsupported Types 
+   Exercises 
+ 
+5. Numbers 
+   Introduction to Numbers 
+   Integers 
+   Floating Point Real Numbers 
+   Complex Numbers 
+   Operators 
+   Built-in Functions 
+   Related Modules 
+   Exercises 
+ 
+6. Sequences: Strings, Lists, and Tuples 
+   Sequences 
+   Strings 
+   Strings and Operators 
+   String-only Operators 
+
+10 
+
+ 
+
+
