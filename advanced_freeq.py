@@ -3,32 +3,42 @@
 """advanced_freeq
 
 Usage:
-    ./advanced_freeq (-i <bookname> | -p <pdfname>)  [-o <output>] [-m <mastered>]
+    ./advanced_freeq -t <txtname>  [-o <output>] [-s <mastered>]
+    ./advanced_freeq -p <pdfname>  [-o <output>] [-s <mastered>]
+    ./advanced_freeq -m <mobiname> [-o <output>] [-s <mastered>]
+    ./advanced_freeq -e <epubname> [-o <output>] [-s <mastered>]
 
 Examples:
-    ./advanced_freeq -i bookname.txt -o bookfreeq.csv
-    ./advanced_freeq -p bookname.pdf -o bookfreeq.csv
-    ./advanced_freeq -p bookname.pdf -o bookfreeq.csv -m mastered.csv
+    ./advanced_freeq -i txtname.txt -o bookfreeq.csv
+    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv
+    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -s mastered.csv
 
 Options:
     -h --help           Show this screen.
     -v --version        Show version
-    -i --input          Input Text file
+    -t --txt            Input Text file
     -p --pdf            Input PDF file
+    -m --mobi           Input mobi file
+    -e --epub           Input Epub file
     -o --output         Output frequency file
-    -m --mastered       Mastered vocabularies file
+    -s --mastered       Mastered vocabularies file
 """
 
 from docopt import docopt
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='advanced freeq 0.1')
+    arguments = docopt(__doc__, version='advanced freeq 0.2')
 
 import os
 import numpy as np
 import pandas as pd
 
-if arguments['--pdf'] == True:
+if arguments['--txt'] == True:
+    os.system(
+        './freeq.py -i %s -o .book_freeq.csv' %
+        arguments['<txtname>']
+    )
+elif arguments['--pdf'] == True:
     from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
     from pdfminer.converter import TextConverter
     from pdfminer.layout import LAParams
@@ -58,11 +68,13 @@ if arguments['--pdf'] == True:
     convert_pdf_to_txt(arguments['<pdfname>'])
     os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
 
+elif arguments['--mobi'] == True:
+    os.system('ebook-convert %s .book.txt' %arguments['<mobiname>'])
+    os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
+
 else:
-    os.system(
-        './freeq -i %s -o .book_freeq.csv' %
-        arguments['<bookname>']
-    )
+    os.system('ebook-convert %s .book.txt' %arguments['<epubname>'])
+    os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
 
 os.system("sed -i 's/^ *//g' .book_freeq.csv")
 os.system("sed -i 's/ /,/g' .book_freeq.csv")
