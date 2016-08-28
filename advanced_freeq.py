@@ -84,6 +84,8 @@ os.system("sed -i 's/^ *//g' .book_freeq.csv")
 os.system("sed -i 's/ /,/g' .book_freeq.csv")
 
 df_book = pd.read_csv('.book_freeq.csv', names=['Freq', 'Word'])
+f = lambda x: len(str(x)) > 2
+df_book = df_book[df_book['Word'].apply(f)]
 
 if arguments['--coca'] == True:
     df_coca = pd.read_csv(
