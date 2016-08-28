@@ -67,6 +67,21 @@ Options:
 
 `mastered.csv` is which vocalubries you have mastered, the default are the top 1000 of [COCA](http://corpus.byu.edu/coca/).
 
+```
+word_select
+
+Usage:
+    ./word_select.py -i <input> [-o=<number>] [-t <output>]
+
+Examples:
+    ./word_select.py -i tst.csv --over 5 --output ed.txt
+
+Options:
+    -i --input
+    -o --over=<number>  Over number [default: 5]
+    -t --output
+```
+
 If you want to use advanced_free on any local directory, you have to clone this branch, and change something
 
 ```
