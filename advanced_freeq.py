@@ -3,31 +3,35 @@
 """advanced_freeq
 
 Usage:
-    ./advanced_freeq -t <txtname>  [-o <output>] [-s <mastered>]
-    ./advanced_freeq -p <pdfname>  [-o <output>] [-s <mastered>]
-    ./advanced_freeq -m <mobiname> [-o <output>] [-s <mastered>]
-    ./advanced_freeq -e <epubname> [-o <output>] [-s <mastered>]
+    ./advanced_freeq -t <txtname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
+    ./advanced_freeq -p <pdfname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
+    ./advanced_freeq -m <mobiname> [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
+    ./advanced_freeq -e <epubname> [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
 
 Examples:
     ./advanced_freeq -i txtname.txt -o bookfreeq.csv
     ./advanced_freeq -p txtname.pdf -o bookfreeq.csv
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -s mastered.csv
+    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -c
+    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv --mas mastered.csv
 
 Options:
     -h --help           Show this screen.
     -v --version        Show version
     -t --txt            Input Text file
-    -p --pdf            Input PDF file
+    -p --pdf            Isnput PDF file
     -m --mobi           Input mobi file
     -e --epub           Input Epub file
     -o --output         Output frequency file
-    -s --mastered       Mastered vocabularies file
+    -c --coca           CoCa Vocabulary
+    --mas=<masterted>   Mastered vocabularies file
+                        [default: ~/Documents/GitHubRepoes/advanced_freeq/mastered.csv ~/Documents/GitHubRepoes/advanced_freeq/COCA_top5000.csv]                        
+
 """
 
 from docopt import docopt
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='advanced freeq 0.2')
+    arguments = docopt(__doc__, version='advanced freeq 0.3')
 
 import os
 import numpy as np
@@ -81,9 +85,9 @@ os.system("sed -i 's/ /,/g' .book_freeq.csv")
 
 df_book = pd.read_csv('.book_freeq.csv', names=['Freq', 'Word'])
 
-if arguments['--mastered'] == False:
+if arguments['--coca'] == True:
     df_coca = pd.read_csv(
-        '/Users/Scott/Documents/GitHubRepoes/advanced_freeq/COCA_top5000.csv'
+        '%s' % arguments['--mas'][1]
     ).loc[:,['Rank','Word']]
     df_freq = df_book[~df_book['Word'].isin(df_coca['Word'].iloc[:1000])]
     df_freq.to_csv('%s' % arguments['<output>'], index = None)
@@ -91,7 +95,7 @@ if arguments['--mastered'] == False:
 
 else:
     df_mastered = pd.read_csv(
-        '%s' % arguments['<mastered>'], names = ['Index', 'Word']
+        '%s' % arguments['--mas'][0], names = ['Index', 'Word']
     )
     df_freq = df_book[~df_book['Word'].isin(df_mastered['Word'])]
     df_freq.to_csv('%s' % arguments['<output>'], index = None)

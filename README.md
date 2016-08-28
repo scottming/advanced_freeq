@@ -40,28 +40,55 @@ $ ./advanced_freeq.py -h
 advanced_freeq
 
 Usage:
-    ./advanced_freeq -t <txtname>  [-o <output>] [-s <mastered>]
-    ./advanced_freeq -p <pdfname>  [-o <output>] [-s <mastered>]
-    ./advanced_freeq -m <mobiname> [-o <output>] [-s <mastered>]
-    ./advanced_freeq -e <epubname> [-o <output>] [-s <mastered>]
+    ./advanced_freeq -t <txtname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
+    ./advanced_freeq -p <pdfname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
+    ./advanced_freeq -m <mobiname> [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
+    ./advanced_freeq -e <epubname> [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
 
 Examples:
     ./advanced_freeq -i txtname.txt -o bookfreeq.csv
     ./advanced_freeq -p txtname.pdf -o bookfreeq.csv
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -s mastered.csv
+    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -c
+    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv --mas mastered.csv
 
 Options:
     -h --help           Show this screen.
     -v --version        Show version
     -t --txt            Input Text file
-    -p --pdf            Input PDF file
+    -p --pdf            Isnput PDF file
     -m --mobi           Input mobi file
     -e --epub           Input Epub file
     -o --output         Output frequency file
-    -s --mastered       Mastered vocabularies file
+    -c --coca           CoCa Vocabulary
+    --mas=<masterted>   Mastered vocabularies file
+                        [default: ~/Documents/GitHubRepoes/advanced_freeq/mastered.csv ~/Documents/GitHubRepoes/advanced_freeq/COCA_top5000.csv]
+						 
 ```
 
 `mastered.csv` is which vocalubries you have mastered, the default are the top 1000 of [COCA](http://corpus.byu.edu/coca/).
+
+If you want to use advanced_free on any local directory, you have to clone this branch, and change something
+
+```
+ln -s <yourlocalbranhpath>/freeq.py ~/.bin/freeq
+ln -s <yourlocalbranhpath>/advanced_freeq.py ~/.bin/advanced_freeq
+```
+
+In `freeq.py`
+
+```git
+-with open('/Users/Scott/Documents/GitHubRepoes/advanced_freeq/lemmas.txt') as f
++with open('<yourlocalRepositoryPath>/advanced_freeq/lemmas.txt') as f
+in:
+```
+
+In `advanced_freeq.py`
+
+```git
+-[default: ~/Documents/GitHubRepoes/advanced_freeq/mastered.csv ~/Documents/GitHubRepoes/advanced_freeq/COCA_top5000.csv]
++[default: <yourlocalRepositoryPath>/advanced_freeq/mastered.csv <yourlocalRepositoryPath>/advanced_freeq/COCA_top5000.csv]
+```
+
 
 ## Thanks to
 
