@@ -15,7 +15,7 @@ $ pip install docopt pdfminer.six numpy pandas
 
 ### OS X
 
-If you're on Mac OS X, The `sed` will return some error when use `sed -i`, you should use [`Homebrew`](http://brew.sh/) download `gnu-sed` to replace default `sed`.
+If your system is Mac OS X, the `sed` will return some errors when using `sed -i`. You could use  `gnu-sed`  downloaded by [`Homebrew`](http://brew.sh/) to replace the default `sed`.
 
 ```
 $ brew install gnu-sed --with-default-names
@@ -51,7 +51,7 @@ Examples:
     ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -s mastered.csv
 
 Options:
-    -h --help           Show this screen.
+    -h --help           Show this screen
     -v --version        Show version
     -t --txt            Input Text file
     -p --pdf            Input PDF file
@@ -61,7 +61,7 @@ Options:
     -s --mastered       Mastered vocabularies file
 ```
 
-`mastered.csv` is which vocalubries you have mastered, the default are the top 1000 of [COCA](http://corpus.byu.edu/coca/).
+`mastered.csv` is the vocalubries you have mastered, the default are the top 1000 of [COCA](http://corpus.byu.edu/coca/).
 
 ```
 word_select
