@@ -63,6 +63,21 @@ Options:
 
 `mastered.csv` is which vocalubries you have mastered, the default are the top 1000 of [COCA](http://corpus.byu.edu/coca/).
 
+```
+word_select
+
+Usage:
+    ./word_select.py -i <input> [-o=<number>] [-t <output>]
+
+Examples:
+    ./word_select.py -i tst.csv --over 5 --output ed.txt
+
+Options:
+    -i --input
+    -o --over=<number>  Over number [default: 5]
+    -t --output
+```
+
 ## Thanks to
 
 @[Enaunimes](https://github.com/Enaunimes/freeq); 12dicts word list: <http://wordlist.aspell.net/12dicts-readme/>
