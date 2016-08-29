@@ -15,7 +15,7 @@ Examples:
     ./advanced_freeq -p txtname.pdf -o bookfreeq.csv --mas mastered.csv
 
 Options:
-    -h --help           Show this screen.
+    -h --help           Show this screen
     -v --version        Show version
     -t --txt            Input Text file
     -p --pdf            Isnput PDF file
