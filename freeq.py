@@ -4,13 +4,15 @@ import re
 import string
 import sys
 import os
+from os.path import expanduser
 import argparse
 from collections import Counter
 
 __all__ = ['WordFinder', 'Book']
 
+home = expanduser('~')
 lemmas = {}
-with open('/Users/Scott/Documents/GitHubRepoes/advanced_freeq/lemmas.txt') as fin:
+with open(home + '/Documents/GitHubRepoes/advanced_freeq/lemmas.txt') as fin:
     for line in fin:
         line = line.strip()
         headword = line.split('\t')[0]

@@ -31,8 +31,8 @@ Review
 
 New to Python? This is the developer's guide to Python development! 
 
-Learn  the core features of Python as well as advanced  topics such as regular expressions, 
-multithreaded  programming,  Web/Internet  and  network  development,  GUI  development 
+Learn the core features of Python as well as advanced topics such as regular expressions, 
+multithreaded programming, Web/Internet and network development, GUI development 
 with Tk(inter) and more 
 
 Also includes features found in the new Python 1.6 and 2.0 releases 
@@ -40,24 +40,24 @@ Also includes features found in the new Python 1.6 and 2.0 releases
 CD-ROM:  Complete  Python  distributions  (source  code,  documentation,  and  various 
 binaries) plus all example scripts in the book 
 
-Python  is  an  Internet  and  systems  programming  language  that  is  soaring  in  popularity  in 
+Python is an Internet and systems programming language that is soaring in popularity in 
 today's  fast-paced  software  development  environment,  and  no  wonder:  it's  simple  (yet 
-robust),  object-oriented  (yet  can  be  used  as  a  procedural  language),  extensible,  scalable 
+robust), object-oriented (yet can be used as a procedural language), extensible, scalable 
 and features an easy to learn syntax that is clear and concise. Python combines the power 
 of  a  compiled  object  language  like  Java  and  C++  with  the  ease  of  use  and  rapid 
-development  time of a scripting  language.  In  fact,  its syntax  is so easy  to understand  that 
-you  are more  likely  to  pick  it  up  faster  than  any  of  the  other  popular  scripting  languages 
+development time of a scripting language. In fact, its syntax is so easy to understand that 
+you are more likely to pick it up faster than any of the other popular scripting languages 
 in use today!  
 
  
 
-In  Core  Python  Programming,  Internet  software  engineer  and  technical  trainer  Wesley 
-Chun  provides  intermediate  and  experienced  developers  all  they  need  to  know  to  learn 
-Python-fast. Like  all Core  Series  books, Core Python Programming  delivers  hundreds  of 
+In Core  Python  Programming, Internet software engineer and technical trainer Wesley 
+Chun provides intermediate and experienced developers all they need to know to learn 
+Python-fast. Like all Core Series books, Core Python Programming delivers hundreds of 
 industrial-strength  code  snippets  and  examples,  all  targeted  at  professional  developers 
 who  want  to  leverage  their  existing  skills!  In  particular,  Core  Python  Programming 
 presents  numerous  interactive  examples  that  can  be  entered  into  the  Python  interpreter 
-right  in  front  of  you!  Finally,  we  present  a  chapter  that  shows  you  step-by-step  how  to 
+right in front of you! Finally, we present a chapter that shows you step-by-step how to 
 extend Python using C or C++.  
 
 Python syntax and style 
@@ -90,9 +90,10 @@ Callable Objects
 
 Extending Python 
 
+the  Python  standard  module 
+
 Coverage  of 
 library  and  client-server  application 
-the  Python  standard  module 
 development  includes  comprehensive  introductions  to  the  following  topics  in  Python 
 programming:  
 
@@ -112,10 +113,10 @@ Executing code in a restricted environment
 
 Inheritance, type emulation, operator overloading, and delegation in an OOP environment 
 
-Finally,  we  provide  an  introduction  to  the  new  features  introduced  in  Python  1.6.  These 
-include Unicode  string  support,  the  new  function  invocation  syntax which  lets  the  caller 
-provide  a  tuple  of  positional  arguments  and/or  a  dictionary  of  keyword  arguments,  and 
-the  new  string methods. We  also  provide  a  glimpse  into  features  that will  only  be  found 
+Finally, we provide an introduction to the new features introduced in Python 1.6. These 
+include Unicode string support, the new function invocation syntax which lets the caller 
+provide a tuple of positional arguments and/or a dictionary of keyword arguments, and 
+the new string methods. We also provide a glimpse into features that will only be found 
 in the newer 2.0 release.  
 
 Every Core Series book:  
@@ -145,7 +146,7 @@ applications
 
 Tables and charts detailing Python modules, built-in functions, operators, and attributes 
 
-Code  snippets  to  try  live  with  Python's  interactive  interpreter,  hammering  the  concepts 
+Code snippets to try live with Python's interactive interpreter, hammering the concepts 
 home 
 
 Extensive code examples-including several complete sample applications 
@@ -209,7 +210,7 @@ Phone: 800-382-3419; FAX: 201-236-7141
 
 E-mail (Internet): corpsales@prenhall.com 
 
-All  products  or  services  mentioned  herein  are  the  trademarks  or  service  marks  of  their 
+All products or services mentioned herein are the trademarks or service marks of their 
 respective companies or organizations. 
 
 All rights reserved. No part of this book may be reproduced, in any form or by any means, 
