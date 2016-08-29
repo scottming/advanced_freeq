@@ -12,7 +12,6 @@ Options:
     -i --input
     -o --output
 
-
 """
 
 from docopt import docopt
@@ -21,16 +20,13 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version='word cloud 0.1')
     print(arguments)
 
-import numpy as np
 import pandas as pd
 
 df = pd.read_csv('%s' % arguments['<input>'])
 df = df[['Word','Freq']]
 tuples = [tuple(x) for x in df.values]
 
-from os import path
 from wordcloud import WordCloud
-
 
 # Generate a word cloud image
 wordcloud = WordCloud().generate_from_frequencies(tuples)
