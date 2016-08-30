@@ -11,8 +11,10 @@ from collections import Counter
 __all__ = ['WordFinder', 'Book']
 
 home = expanduser('~')
+full_path = os.path.realpath(__file__)
+path, filename = os.path.split(full_path)
 lemmas = {}
-with open(home + '/Documents/GitHubRepoes/advanced_freeq/lemmas.txt') as fin:
+with open(path + '/lemmas.txt') as fin:
     for line in fin:
         line = line.strip()
         headword = line.split('\t')[0]
