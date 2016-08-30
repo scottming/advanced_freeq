@@ -23,13 +23,17 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version='word select 0.2')
 
 import pandas as pd
-import re 
+import re
+import os
+
+full_path = os.path.realpath(__file__)
+path, filename = os.path.split(full_path)
 
 df = pd.read_csv('%s' % arguments['<input>'])
 df1 = df[df.iloc[:, 0] >= int(arguments['--over'])]
 
 if arguments['--meaning'] == True:
-    with open('En-Ch CollinsCOBUILD.txt') as myfile2:
+    with open(path + '/' + 'En-Ch CollinsCOBUILD.txt') as myfile2:
         data2 = myfile2.read()
 
     p = re.compile(r'\n\n\n\n')
