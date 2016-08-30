@@ -4,13 +4,13 @@
 Use Python 3.4+ to get the lastest version of advanced_freeq
 
 ```
-git clone https://github.com/scottming/advanced_freeq.git
+$ git clone https://github.com/scottming/advanced_freeq.git
 ```
 
 Decorator packages are required for advanced_freeq.py.
 
 ```
-pip install docopt pdfminer.six numpy pandas word_cloud image
+$ pip install docopt pdfminer.six numpy pandas word_cloud image
 ```
 
 ### OS X
@@ -18,19 +18,19 @@ pip install docopt pdfminer.six numpy pandas word_cloud image
 If your system is Mac OS X, the `sed` will return some errors when using `sed -i`. You could use  `gnu-sed`  downloaded by [`Homebrew`](http://brew.sh/) to replace the default `sed`
 
 ```
-brew install gnu-sed --with-default-names
+$ brew install gnu-sed --with-default-names
 ```
 
 Install Calibre
 
 ```
-brew cask install calibre
+$ brew cask install calibre
 ```
 
 ### Debian
 
 ```
-sudo apt-get install calibre
+$ sudo apt-get install calibre
 ```
 
 ## Usage
@@ -42,28 +42,20 @@ $ ./advanced_freeq.py -h
 advanced_freeq
 
 Usage:
-    ./advanced_freeq -t <txtname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
-    ./advanced_freeq -p <pdfname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
-    ./advanced_freeq -m <mobiname> [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
-    ./advanced_freeq -e <epubname> [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
+    ./advanced_freeq -i <bookname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
 
 Examples:
     ./advanced_freeq -i txtname.txt -o bookfreeq.csv
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -c
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv --mas mastered.csv
+    ./advanced_freeq -i txtname.pdf -o bookfreeq.csv --mas mastered.csv
 
 Options:
-    -h --help           Show this screen.
+    -h --help           Show this screen
     -v --version        Show version
-    -t --txt            Input Text file
-    -p --pdf            Isnput PDF file
-    -m --mobi           Input mobi file
-    -e --epub           Input Epub file
+    -i --input          Input file of bookname
     -o --output         Output frequency file
     -c --coca           CoCa Vocabulary
     --mas=<masterted>   Mastered vocabularies file
-                        [default: ~/Documents/GitHubRepoes/advanced_freeq/mastered.csv ~/Documents/GitHubRepoes/advanced_freeq/COCA_top5000.csv]
+                        [default: /mastered.csv /COCA_top5000.csv]
 						 
 ```
 
@@ -134,8 +126,8 @@ Options:
 If you want to use advanced_free on any local directory, you have to clone this branch, and do: 
 
 ```
-ln -s <yourlocalbranhpath>/advanced_freeq.py ~/usr/local/bin/advanced_freeq
-...
+$ ln -s <yourlocalbranhpath>/advanced_freeq.py ~/usr/local/bin/advanced_freeq
+$ ...
 ```
 
 ## Thanks to
