@@ -96,7 +96,7 @@ if arguments['--coca'] == True:
     ).loc[:,['Rank','Word']]
     df_freq = df_book[~df_book['Word'].isin(df_coca['Word'].iloc[:1000])]
     df_freq.to_csv('%s' % arguments['<output>'], index = None)
-    print('All your freeq words are in %s' % arguments['<output>'])
+    print('All your word frequency are in %s' % arguments['<output>'])
 
 elif len(arguments['--mas']) < 2:
     df_mastered = pd.read_csv(
