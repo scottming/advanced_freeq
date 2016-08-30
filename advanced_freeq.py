@@ -24,7 +24,7 @@ Options:
     -o --output         Output frequency file
     -c --coca           CoCa Vocabulary
     --mas=<masterted>   Mastered vocabularies file
-                        [default: ~/Documents/GitHubRepoes/advanced_freeq/mastered.csv ~/Documents/GitHubRepoes/advanced_freeq/COCA_top5000.csv]                        
+                        [default: /mastered.csv /COCA_top5000.csv]
 
 """
 
@@ -37,9 +37,12 @@ import os
 import numpy as np
 import pandas as pd
 
+full_path = os.path.realpath(__file__)
+path, filename = os.path.split(full_path)
+
 if arguments['--txt'] == True:
     os.system(
-        'freeq -i %s -o .book_freeq.csv' %
+        path + '/' + 'freeq.py -i %s -o .book_freeq.csv' %
         arguments['<txtname>']
     )
 elif arguments['--pdf'] == True:
@@ -70,15 +73,15 @@ elif arguments['--pdf'] == True:
         with open('.book.txt', 'w') as book:
             book.write('%s' % str)
     convert_pdf_to_txt(arguments['<pdfname>'])
-    os.system('freeq -i .book.txt -o .book_freeq.csv')
+    os.system(path + '/' + 'freeq.py -i .book.txt -o .book_freeq.csv')
 
 elif arguments['--mobi'] == True:
     os.system('ebook-convert %s .book.txt' %arguments['<mobiname>'])
-    os.system('freeq -i .book.txt -o .book_freeq.csv')
+    os.system(path + '/' + 'freeq.py -i .book.txt -o .book_freeq.csv')
 
 else:
     os.system('ebook-convert %s .book.txt' %arguments['<epubname>'])
-    os.system('freeq -i .book.txt -o .book_freeq.csv')
+    os.system(path + '/' + 'freeq.py -i .book.txt -o .book_freeq.csv')
 
 os.system("sed -i 's/^ *//g' .book_freeq.csv")
 os.system("sed -i 's/ /,/g' .book_freeq.csv")
@@ -89,15 +92,23 @@ df_book = df_book[df_book['Word'].apply(f)]
 
 if arguments['--coca'] == True:
     df_coca = pd.read_csv(
-        '%s' % arguments['--mas'][1]
+        path + '%s' % arguments['--mas'][1]
     ).loc[:,['Rank','Word']]
     df_freq = df_book[~df_book['Word'].isin(df_coca['Word'].iloc[:1000])]
     df_freq.to_csv('%s' % arguments['<output>'], index = None)
     print('All your freeq words are in %s' % arguments['<output>'])
 
-else:
+elif len(arguments[<mastered>]) < 2:
     df_mastered = pd.read_csv(
         '%s' % arguments['--mas'][0], names = ['Index', 'Word']
+    )
+    df_freq = df_book[~df_book['Word'].isin(df_mastered['Word'])]
+    df_freq.to_csv('%s' % arguments['<output>'], index = None)
+    print('All your word frequency are in %s' % arguments['<output>'])
+
+else:
+    df_mastered = pd.read_csv(
+        path + '%s' % arguments['--mas'][0], names = ['Index', 'Word']
     )
     df_freq = df_book[~df_book['Word'].isin(df_mastered['Word'])]
     df_freq.to_csv('%s' % arguments['<output>'], index = None)
