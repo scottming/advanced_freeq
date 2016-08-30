@@ -27,8 +27,12 @@ if __name__ == '__main__':
 
 import pandas as pd
 import re
+import os
 
-with open('En-Ch CollinsCOBUILD.txt') as myfile:
+full_path = os.path.realpath(__file__)
+path, filename = os.path.split(full_path)
+
+with open(path + '/' + 'En-Ch CollinsCOBUILD.txt') as myfile:
     data = myfile.read()
 
 p = re.compile(r'\n\xa0\xa0')
