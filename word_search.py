@@ -1,48 +1,49 @@
+#!/usr/bin/env python3
 
-# coding: utf-8
+"""word_search
 
-# In[1]:
+Usage:
+    ./word_search.py <word> [-i <input>] [-o <output>]
+
+Examples:
+    ./word_search.py 'get'
+    ./word_search.py 'get \w*ed'
+    ./word_search.py '\doff\d'
+    ./word_search.py 'work.*\doff\d'
+    ./word_search.py '(walk|walked|walking)(sth|sth.something)\doff\d'
+
+Options:
+    -h --help
+    -v --versions
+    -i --input        Develping...
+    -o --output       Develping...
+
+"""
+
+from docopt import docopt
+
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='word search 0.1')
 
 import pandas as pd
 import re
 
-
-# In[2]:
-
 with open('En-Ch CollinsCOBUILD.txt') as myfile:
     data = myfile.read()
 
-
-# In[7]:
-
-# p = re.compile(r'==')
-#p = re.compile(r'\n')
 p = re.compile(r'\n\xa0\xa0')
 data1 = p.sub(r'==', data)
 p1 = re.compile(r'\n')
 d = p1.split(data1)
 dic = pd.DataFrame(d, columns=['Meaning'])
 
-
-# In[36]:
-
-pattern = 'walk.*\soff\s'
-
-
-# In[37]:
+pattern = arguments['<word>']
 
 df_search = dic[dic['Meaning'].str.contains(pattern, na=False)]
-
-
-# In[43]:
 
 lst = list(df_search['Meaning'].values)
 searched = '\n\n'.join(lst)
 
-
-# In[42]:
-
 p2 = re.compile(r'\xa0\xa0\xa0')
 got = p2.sub(r'\n', searched)
 print(got)
-

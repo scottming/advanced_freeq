@@ -10,7 +10,7 @@ git clone https://github.com/scottming/advanced_freeq.git
 Decorator packages are required for advanced_freeq.py.
 
 ```
-pip install docopt pdfminer.six numpy pandas
+pip install docopt pdfminer.six numpy pandas word_cloud image
 ```
 
 ### OS X
@@ -34,6 +34,8 @@ sudo apt-get install calibre
 ```
 
 ## Usage
+
+### advanced_freeq
 
 ```
 $ ./advanced_freeq.py -h
@@ -67,20 +69,67 @@ Options:
 
 `mastered.csv` is the vocalubries you have mastered, the default are the top 1000 of [COCA](http://corpus.byu.edu/coca/).
 
+### word_select 
+
 ```
+$ ./word_select -h
 word_select
 
 Usage:
-    ./word_select.py -i <input> [-o=<number>] [-t <output>]
+    ./word_select.py -i <input> [-o=<number>] [-d <dic> | -m <meaning>]
 
 Examples:
-    ./word_select.py -i tst.csv --over 5 --output ed.txt
+    ./word_select.py -i tst.csv --over 4 -m meaningfile.md
+    ./word_select.py -i tst.csv --over 4 --dic ed.txt
 
 Options:
     -i --input
-    -o --over=<number>  Over number [default: 5]
-    -t --output
+    -o --over=<number>           Over number [default: 5]
+    -d --dic                     For dictionary
+    -m --meaning                 Output meaning file
+
 ```
+
+### word_cloud
+
+```
+$ ./word_cloud -h
+word_cloud
+
+Usage:
+    ./word_cloud.py -i <input> -o <output>
+
+Examples:
+    ./word_cloud.py -i tst.csv -o output.png
+
+Options:
+    -i --input
+    -o --output
+```
+
+### word_search
+
+```
+$ ./word_search -h
+word_search
+
+Usage:
+    ./word_search.py <word> [-i <input>] [-o <output>]
+
+Examples:
+    ./word_search.py 'get'
+    ./word_search.py 'get \w*ed'
+    ./word_search.py '\doff\d'
+    ./word_search.py 'work.*\doff\d'
+    ./word_search.py '(walk|walked|walking)(sth|sth.something)\doff\d'
+
+Options:
+    -h --help
+    -v --versions
+    -i --input        Develping...
+    -o --output       Develping...
+```
+### Note
 
 If you want to use advanced_free on any local directory, you have to clone this branch, and change something
 
