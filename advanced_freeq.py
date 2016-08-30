@@ -98,7 +98,7 @@ if arguments['--coca'] == True:
     df_freq.to_csv('%s' % arguments['<output>'], index = None)
     print('All your freeq words are in %s' % arguments['<output>'])
 
-elif len(arguments[<mastered>]) < 2:
+elif len(arguments['--mas']) < 2:
     df_mastered = pd.read_csv(
         '%s' % arguments['--mas'][0], names = ['Index', 'Word']
     )
