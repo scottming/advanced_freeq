@@ -3,24 +3,16 @@
 """advanced_freeq
 
 Usage:
-    ./advanced_freeq -t <txtname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
-    ./advanced_freeq -p <pdfname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
-    ./advanced_freeq -m <mobiname> [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
-    ./advanced_freeq -e <epubname> [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
+    ./advanced_freeq -i <bookname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
 
 Examples:
     ./advanced_freeq -i txtname.txt -o bookfreeq.csv
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -c
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv --mas mastered.csv
+    ./advanced_freeq -i txtname.pdf -o bookfreeq.csv --mas mastered.csv
 
 Options:
     -h --help           Show this screen
     -v --version        Show version
-    -t --txt            Input Text file
-    -p --pdf            Isnput PDF file
-    -m --mobi           Input mobi file
-    -e --epub           Input Epub file
+    -i --input          Input file of bookname
     -o --output         Output frequency file
     -c --coca           CoCa Vocabulary
     --mas=<masterted>   Mastered vocabularies file
@@ -31,7 +23,8 @@ Options:
 from docopt import docopt
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='advanced freeq 0.3')
+    arguments = docopt(__doc__, version='advanced freeq 0.4')
+    print(arguments)
 
 import os
 import numpy as np
@@ -40,12 +33,16 @@ import pandas as pd
 full_path = os.path.realpath(__file__)
 path, filename = os.path.split(full_path)
 
-if arguments['--txt'] == True:
+input_book = arguments['<bookname>']
+bookname, s = input_book.split('.')
+book_format = s[-1]
+
+if book_format == 'txt':
     os.system(
         path + '/' + 'freeq.py -i %s -o .book_freeq.csv' %
-        arguments['<txtname>']
+        input_book
     )
-elif arguments['--pdf'] == True:
+elif book_format == 'pdf':
     from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
     from pdfminer.converter import TextConverter
     from pdfminer.layout import LAParams
@@ -72,16 +69,12 @@ elif arguments['--pdf'] == True:
         retstr.close()
         with open('.book.txt', 'w') as book:
             book.write('%s' % str)
-    convert_pdf_to_txt(arguments['<pdfname>'])
-    os.system(path + '/' + 'freeq.py -i .book.txt -o .book_freeq.csv')
-
-elif arguments['--mobi'] == True:
-    os.system('ebook-convert %s .book.txt' %arguments['<mobiname>'])
+    convert_pdf_to_txt(input_book)
     os.system(path + '/' + 'freeq.py -i .book.txt -o .book_freeq.csv')
 
 else:
-    os.system('ebook-convert %s .book.txt' %arguments['<epubname>'])
-    os.system(path + '/' + 'freeq.py -i .book.txt -o .book_freeq.csv')
+    os.system('ebook-convert %s .txt' % input_book)
+    os.system(path + '/' + 'freeq.py -i %s.txt -o .book_freeq.csv' % bookname)
 
 os.system("sed -i 's/^ *//g' .book_freeq.csv")
 os.system("sed -i 's/ /,/g' .book_freeq.csv")
