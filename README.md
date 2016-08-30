@@ -131,28 +131,12 @@ Options:
 ```
 ### Note
 
-If you want to use advanced_free on any local directory, you have to clone this branch, and change something
+If you want to use advanced_free on any local directory, you have to clone this branch, and do: 
 
 ```
-ln -s <yourlocalbranhpath>/freeq.py ~/.bin/freeq
-ln -s <yourlocalbranhpath>/advanced_freeq.py ~/.bin/advanced_freeq
+ln -s <yourlocalbranhpath>/advanced_freeq.py ~/usr/local/bin/advanced_freeq
+...
 ```
-
-In `freeq.py`
-
-```git
--with open('/Users/Scott/Documents/GitHubRepoes/advanced_freeq/lemmas.txt') as f
-+with open('<yourlocalRepositoryPath>/advanced_freeq/lemmas.txt') as f
-in:
-```
-
-In `advanced_freeq.py`
-
-```git
--[default: ~/Documents/GitHubRepoes/advanced_freeq/mastered.csv ~/Documents/GitHubRepoes/advanced_freeq/COCA_top5000.csv]
-+[default: <yourlocalRepositoryPath>/advanced_freeq/mastered.csv <yourlocalRepositoryPath>/advanced_freeq/COCA_top5000.csv]
-```
-
 
 ## Thanks to
 
