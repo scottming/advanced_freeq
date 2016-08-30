@@ -8,9 +8,9 @@ Usage:
 Examples:
     ./word_search.py 'get'
     ./word_search.py 'get \w*ed'
-    ./word_search.py '\doff\d'
-    ./word_search.py 'work.*\doff\d'
-    ./word_search.py '(walk|walked|walking)(sth|sth.something)\doff\d'
+    ./word_search.py '\soff\s'
+    ./word_search.py 'work.*\soff\s'
+    ./word_search.py '(walk|walked|walking)(sth|sth.something)\soff\s'
 
 Options:
     -h --help

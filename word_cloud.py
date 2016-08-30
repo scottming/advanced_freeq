@@ -18,7 +18,6 @@ from docopt import docopt
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='word cloud 0.1')
-    print(arguments)
 
 import pandas as pd
 
