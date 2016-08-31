@@ -3,17 +3,19 @@
 """word_select
 
 Usage:
-    ./word_select.py -i <input> [-o=<number>] [-d <dic> | -m <meaning>]
+    ./word_select.py -i <input> [-o <output>] [-m] [--over=<number>]
 
 Examples:
-    ./word_select.py -i tst.csv --over 4 -m meaningfile.md
-    ./word_select.py -i tst.csv --over 4 --dic ed.txt
+    ./word_select.py -i tst.csv --over 4 -o  output_fordic.txt
+    ./word_select.py -i tst.csv --over 4 -om output_meaningfile.md
 
 Options:
-    -i --input
-    -o --over=<number>           Over number [default: 5]
-    -d --dic                     For dictionary
-    -m --meaning                 Output meaning file
+    -h --help           Show this screen
+    -v --vesion         Show vesion
+    -i --input          Input file of Frequency
+    -o --output         Output file
+    -m --meaning        Output meaning file
+    --over=<number>     Over number [default: 5]
 
 """
 
@@ -21,7 +23,7 @@ from docopt import docopt
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='word select 0.2')
-
+    print(arguments)
 import pandas as pd
 import re
 import os
@@ -48,15 +50,15 @@ if arguments['--meaning'] == True:
     mean_data = pd.merge(dic, df1, on='Word').sort_values(
                         ['Freq', 'Word'], ascending=False)
     lst = list(mean_data.Meaning.values)
-    with open('%s' % arguments['<meaning>'], 'w') as f:
+    with open('%s' % arguments['<output>'], 'w') as f:
         f.write('\n\n'.join(lst))
-    print('Your words_meaning_file are in %s' % arguments['<meaning>'])
+    print('Your words_meaning_file are in %s' % arguments['<output>'])
 
-elif arguments['--dic'] == True:
+elif arguments['--output'] == True:
     df1.to_csv(
-        '%s' % arguments['<dic>'], columns=['Word'], header=None, index=None
+        '%s' % arguments['<output>'], columns=['Word'], header=None, index=None
         )
-    print('Your words are in %s' % arguments['<dic>'])
+    print('Your words are in %s' % arguments['<output>'])
 
 else:
     print(df1)
