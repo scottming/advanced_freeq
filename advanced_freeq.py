@@ -24,10 +24,8 @@ from docopt import docopt
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='advanced freeq 0.4')
-    print(arguments)
 
 import os
-import numpy as np
 import pandas as pd
 
 full_path = os.path.realpath(__file__)
