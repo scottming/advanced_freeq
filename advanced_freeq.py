@@ -32,14 +32,14 @@ full_path = os.path.realpath(__file__)
 path, filename = os.path.split(full_path)
 
 input_book = arguments['<bookname>']
-bookname, s = input_book.split('.')
-book_format = s[-1]
+bookname, book_format = input_book.split('.')
 
 if book_format == 'txt':
     os.system(
         path + '/' + 'freeq.py -i %s -o .book_freeq.csv' %
         input_book
     )
+
 elif book_format == 'pdf':
     from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
     from pdfminer.converter import TextConverter
