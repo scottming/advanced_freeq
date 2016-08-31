@@ -64,22 +64,22 @@ Options:
 ### word_select 
 
 ```
-$ ./word_select -h
 word_select
 
 Usage:
-    ./word_select.py -i <input> [-o=<number>] [-d <dic> | -m <meaning>]
+    ./word_select.py -i <input> [-o <output>] [-m] [--over=<number>]
 
 Examples:
-    ./word_select.py -i tst.csv --over 4 -m meaningfile.md
-    ./word_select.py -i tst.csv --over 4 --dic ed.txt
+    ./word_select.py -i tst.csv --over 4 -o  output_fordic.txt
+    ./word_select.py -i tst.csv --over 4 -om output_meaningfile.md
 
 Options:
-    -i --input
-    -o --over=<number>           Over number [default: 5]
-    -d --dic                     For dictionary
-    -m --meaning                 Output meaning file
-
+    -h --help           Show this screen
+    -v --vesion         Show vesion
+    -i --input          Input file of Frequency
+    -o --output         Output file
+    -m --meaning        Output meaning file
+    --over=<number>     Over number [default: 5]
 ```
 
 ### word_cloud
