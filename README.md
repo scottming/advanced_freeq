@@ -64,6 +64,7 @@ Options:
 ### word_select 
 
 ```
+$ ./word_select.py -h
 word_select
 
 Usage:
