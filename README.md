@@ -86,7 +86,7 @@ Options:
 ### word_cloud
 
 ```
-$ ./word_cloud -h
+$ ./word_cloud.py -h
 word_cloud
 
 Usage:
@@ -103,7 +103,7 @@ Options:
 ### word_search
 
 ```
-$ ./word_search -h
+$ ./word_search.py -h
 word_search
 
 Usage:
