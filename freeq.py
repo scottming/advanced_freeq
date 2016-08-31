@@ -4,13 +4,17 @@ import re
 import string
 import sys
 import os
+from os.path import expanduser
 import argparse
 from collections import Counter
 
 __all__ = ['WordFinder', 'Book']
 
+home = expanduser('~')
+full_path = os.path.realpath(__file__)
+path, filename = os.path.split(full_path)
 lemmas = {}
-with open('lemmas.txt') as fin:
+with open(path + '/lemmas.txt') as fin:
     for line in fin:
         line = line.strip()
         headword = line.split('\t')[0]

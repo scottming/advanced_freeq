@@ -3,42 +3,46 @@
 """advanced_freeq
 
 Usage:
-    ./advanced_freeq -t <txtname>  [-o <output>] [-s <mastered>]
-    ./advanced_freeq -p <pdfname>  [-o <output>] [-s <mastered>]
-    ./advanced_freeq -m <mobiname> [-o <output>] [-s <mastered>]
-    ./advanced_freeq -e <epubname> [-o <output>] [-s <mastered>]
+    ./advanced_freeq -i <bookname>  [-o <output>] [-c] [--mas=<mastered> --mas=<mastered>]
 
 Examples:
     ./advanced_freeq -i txtname.txt -o bookfreeq.csv
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv
-    ./advanced_freeq -p txtname.pdf -o bookfreeq.csv -s mastered.csv
+    ./advanced_freeq -i txtname.pdf -o bookfreeq.csv --mas mastered.csv
 
 Options:
     -h --help           Show this screen
     -v --version        Show version
-    -t --txt            Input Text file
-    -p --pdf            Input PDF file
-    -m --mobi           Input mobi file
-    -e --epub           Input Epub file
+    -i --input          Input file of bookname
     -o --output         Output frequency file
-    -s --mastered       Mastered vocabularies file
+    -c --coca           CoCa Vocabulary
+    --mas=<masterted>   Mastered vocabularies file
+                        [default: /mastered.csv /COCA_top5000.csv]
+
 """
 
 from docopt import docopt
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='advanced freeq 0.2')
+    arguments = docopt(__doc__, version='advanced freeq 0.4')
+    print(arguments)
 
 import os
 import numpy as np
 import pandas as pd
 
-if arguments['--txt'] == True:
+full_path = os.path.realpath(__file__)
+path, filename = os.path.split(full_path)
+
+input_book = arguments['<bookname>']
+bookname, s = input_book.split('.')
+book_format = s[-1]
+
+if book_format == 'txt':
     os.system(
-        './freeq.py -i %s -o .book_freeq.csv' %
-        arguments['<txtname>']
+        path + '/' + 'freeq.py -i %s -o .book_freeq.csv' %
+        input_book
     )
-elif arguments['--pdf'] == True:
+elif book_format == 'pdf':
     from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
     from pdfminer.converter import TextConverter
     from pdfminer.layout import LAParams
@@ -65,16 +69,12 @@ elif arguments['--pdf'] == True:
         retstr.close()
         with open('.book.txt', 'w') as book:
             book.write('%s' % str)
-    convert_pdf_to_txt(arguments['<pdfname>'])
-    os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
-
-elif arguments['--mobi'] == True:
-    os.system('ebook-convert %s .book.txt' %arguments['<mobiname>'])
-    os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
+    convert_pdf_to_txt(input_book)
+    os.system(path + '/' + 'freeq.py -i .book.txt -o .book_freeq.csv')
 
 else:
-    os.system('ebook-convert %s .book.txt' %arguments['<epubname>'])
-    os.system('./freeq.py -i .book.txt -o .book_freeq.csv')
+    os.system('ebook-convert %s .txt' % input_book)
+    os.system(path + '/' + 'freeq.py -i %s.txt -o .book_freeq.csv' % bookname)
 
 os.system("sed -i 's/^ *//g' .book_freeq.csv")
 os.system("sed -i 's/ /,/g' .book_freeq.csv")
@@ -83,17 +83,25 @@ df_book = pd.read_csv('.book_freeq.csv', names=['Freq', 'Word'])
 f = lambda x: len(str(x)) > 2
 df_book = df_book[df_book['Word'].apply(f)]
 
-if arguments['--mastered'] == False:
+if arguments['--coca'] == True:
     df_coca = pd.read_csv(
-        'COCA_top5000.csv'
+        path + '%s' % arguments['--mas'][1]
     ).loc[:,['Rank','Word']]
     df_freq = df_book[~df_book['Word'].isin(df_coca['Word'].iloc[:1000])]
     df_freq.to_csv('%s' % arguments['<output>'], index = None)
-    print('All your freeq words are in %s' % arguments['<output>'])
+    print('All your word frequency are in %s' % arguments['<output>'])
+
+elif len(arguments['--mas']) < 2:
+    df_mastered = pd.read_csv(
+        '%s' % arguments['--mas'][0], names = ['Index', 'Word']
+    )
+    df_freq = df_book[~df_book['Word'].isin(df_mastered['Word'])]
+    df_freq.to_csv('%s' % arguments['<output>'], index = None)
+    print('All your word frequency are in %s' % arguments['<output>'])
 
 else:
     df_mastered = pd.read_csv(
-        '%s' % arguments['<mastered>'], names = ['Index', 'Word']
+        path + '%s' % arguments['--mas'][0], names = ['Index', 'Word']
     )
     df_freq = df_book[~df_book['Word'].isin(df_mastered['Word'])]
     df_freq.to_csv('%s' % arguments['<output>'], index = None)
