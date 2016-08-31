@@ -32,7 +32,9 @@ full_path = os.path.realpath(__file__)
 path, filename = os.path.split(full_path)
 
 input_book = arguments['<bookname>']
-bookname, book_format = input_book.split('.')
+s = input_book.split('.')
+book_name = '.'.join(s[:-1])
+book_format = s[-1]
 
 if book_format == 'txt':
     os.system(
@@ -72,7 +74,7 @@ elif book_format == 'pdf':
 
 else:
     os.system('ebook-convert %s .txt' % input_book)
-    os.system(path + '/' + 'freeq.py -i %s.txt -o .book_freeq.csv' % bookname)
+    os.system(path + '/' + 'freeq.py -i %s.txt -o .book_freeq.csv' % book_name)
 
 os.system("sed -i 's/^ *//g' .book_freeq.csv")
 os.system("sed -i 's/ /,/g' .book_freeq.csv")
