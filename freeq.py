@@ -36,7 +36,8 @@ def pdf_to_txt(input_book, name):
     maxpages = 0
     caching = True
     pagenos=set()
-    for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password,caching=caching, check_extractable=True):
+    for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password,
+                                  caching=caching, check_extractable=True):
         interpreter.process_page(page)
     fp.close()
     device.close()
@@ -193,8 +194,8 @@ class Op(object):
         self.inputfile = inputfile
         self.mastered = mastered
         self.s = self.inputfile.split('.')
-        self.name = '.'.join(self.s[:-1]) # bookname
-        self.fomat = self.s[-1] # bookformat
+        self.name = '.'.join(self.s[:-1])  # bookname
+        self.fomat = self.s[-1]  # bookformat
 
 
 def get_freq(input_txt):
