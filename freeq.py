@@ -1,20 +1,59 @@
-#!/usr/bin/env python3
-
+import click
 import re
 import string
 import sys
 import os
-from os.path import expanduser
-import argparse
 from collections import Counter
+import pandas as pd
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
-__all__ = ['WordFinder', 'Book']
+if sys.version_info[0] > 2:
+    from io import StringIO
+else:
+    from io import BytesIO
 
-home = expanduser('~')
-full_path = os.path.realpath(__file__)
-path, filename = os.path.split(full_path)
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfpage import PDFPage
+
+dirpath = os.path.dirname(__file__)
+
+
+def pdf_to_txt(input_book, name):
+    rsrcmgr = PDFResourceManager()
+    try:
+        retstr = StringIO()
+    except NameError:
+        retstr = BytesIO()
+    codec = 'utf-8'
+    laparams = LAParams()
+    device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
+    fp = open(input_book, 'rb')
+    interpreter = PDFPageInterpreter(rsrcmgr, device)
+    password = ""
+    maxpages = 0
+    caching = True
+    pagenos=set()
+    for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password,caching=caching, check_extractable=True):
+        interpreter.process_page(page)
+    fp.close()
+    device.close()
+    str = retstr.getvalue()
+    retstr.close()
+    with open(name + '.txt', 'w') as book:
+        book.write('%s' % str)
+
+
+def other_format_to_txt(input_book):
+    os.system('ebook-convert %s .txt' % input_book)
+
+
 lemmas = {}
-with open(path + '/lemmas.txt') as fin:
+LEM_PATH = os.path.join(os.path.dirname(__file__),
+                       'lemmas.txt')
+with open(LEM_PATH) as fin:
     for line in fin:
         line = line.strip()
         headword = line.split('\t')[0]
@@ -147,29 +186,206 @@ class Book(object):
         pass
 
 
-if __name__ == '__main__':
-    if sys.platform == 'nt':
-        sys.stderr.write("I haven't tested the code on Windows. Feedback is welcome.\n")
+class Op(object):
+    '''Option Class'''
+    def __init__(self, inputfile, mastered=None,
+                 s=None, name=None, fomat=None):
+        self.inputfile = inputfile
+        self.mastered = mastered
+        self.s = self.inputfile.split('.')
+        self.name = '.'.join(self.s[:-1]) # bookname
+        self.fomat = self.s[-1] # bookformat
+
+
+def get_freq(input_txt):
+    '''Input file with TXT format'''
+    book = Book(input_txt)
+    result = book.freq()
+
+    report = ['Freq,Word']
+    for word in sorted(result, key=lambda x: result[x], reverse=True):
+        report.append('{},{}'.format(result[word], word))
 
     LINE_SEP = os.linesep
+    return LINE_SEP.join(report)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input', dest='input_file')
-    parser.add_argument('-o', '--output', dest='output_file')
-    args = parser.parse_args()
 
-    book = Book(args.input_file)
-    result = book.freq()
-    # Maximum width of the ocurrence column
-    max_width = max(len(str(v)) for v in result.values())
+def clear_word(input_freq, mastered):
+    df_book = pd.read_csv(input_freq)
+    f = lambda x: len(str(x)) > 2
+    df_book = df_book[df_book['Word'].apply(f)]
+    df_mastered = pd.read_csv(mastered)
+    df_freq = df_book[~df_book['Word'].isin(df_mastered['Word'])]
+    return df_freq
 
-    report = []
-    for word in sorted(result, key=lambda x: result[x], reverse=True):
-        report.append('{:>{}} {}'.format(result[word], max_width, word))
 
-    if args.output_file:
-        with open(args.output_file, 'w') as output:
-            output.write(LINE_SEP.join(report))
-            output.write(LINE_SEP)
+try:
+    outcsv = StringIO()
+except NameError:
+    outcsv = BytesIO()
+
+def determine_fomat(inputfile, name, fomat, mastered):
+    if fomat == 'pdf':
+        pdf_to_txt(inputfile, name)
+    elif fomat == 'txt':
+        pass
     else:
-        print(LINE_SEP.join(report))
+        other_format_to_txt(inputfile)
+
+    meta_freq = get_freq(name + '.txt')
+    outcsv.write(meta_freq)
+    outcsv.seek(0)
+    freq = clear_word(outcsv, mastered)
+    return freq
+
+
+COL_PATH = os.path.join(os.path.dirname(__file__),
+                       'dictionary/En-Ch_CollinsCOBUILD.txt')
+with open(COL_PATH) as myfile:
+        col_data = myfile.read()
+def find_col_mean(dic_data, freq_data):
+
+    p = re.compile(r'\n\n\n\n')
+    d = p.split(dic_data) # apply words
+    df_dic = pd.DataFrame(d, columns=['Meaning'])
+    df_dic['Word'] = df_dic.Meaning.str.extract('(★☆☆\s\s\s.*)\n', expand=False)  # extract the words line
+
+    df_dic = df_dic.loc[:, ['Word', 'Meaning']]
+    f = lambda x: str(x)[6:]
+    df_dic['Word'] = df_dic.Word.apply(f)  # deep extract
+
+    mean_data = pd.merge(df_dic, freq_data, on='Word').sort_values(
+                        ['Freq', 'Word'], ascending=False)
+    lst = list(mean_data.Meaning.values)
+    return lst
+
+
+OXF_PATH = os.path.join(os.path.dirname(__file__),
+                       'dictionary/En-Ch_Oxford_Advanced_Leaners_Dictionary.txt')
+with open(OXF_PATH) as myfile1:
+        oxf_data = myfile1.read()
+def find_oxf_mean(dic_data, freq_data):
+
+    p = re.compile(r'\n\n\n')
+    d = p.split(dic_data) # apply words
+    df_dic = pd.DataFrame(d, columns=['Meaning'])
+    df_dic['Word'] = df_dic.Meaning.str.extract('(★☆☆\s\s\s.*)\n', expand=False)  # extract the words line
+
+    df_dic = df_dic.loc[:, ['Word', 'Meaning']]
+    f = lambda x: str(x)[6:]
+    df_dic['Word'] = df_dic.Word.apply(f) # deep extract
+
+    mean_data = pd.merge(df_dic, freq_data, on='Word').sort_values(
+                        ['Freq', 'Word'], ascending=False)
+    lst = list(mean_data.Meaning.values)
+    return lst
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
+@click.group(context_settings=CONTEXT_SETTINGS)
+@click.option('-i', '--inputfile')
+@click.option('-m', '--mastered', default=dirpath + '/mastered.csv')
+@click.pass_context
+def cli(ctx, inputfile, mastered):
+    '''freeq is a script to generate word frequency report of English text/pdf/epub...
+
+    Example:
+
+    \b
+        freeq -i tsttxt.pdf dic
+        freeq -i tstpdf.txt mean
+
+    \b
+        freeq -i tsttxt.txt dic  -o out.txt
+        freeq -i tstpdf.pdf mean -o out.txt
+
+    \b
+        freeq -i tsttxt.txt dic  -n 2 -o out.txt
+        freeq -i tstpdf.pdf meen -n 2 -o out.txt
+    '''
+    ctx.obj = Op(inputfile, mastered)
+
+
+@cli.command()
+@click.option('-o', '--output')
+@click.option('-n', '--number', default=3, help='Over freq number.')
+@click.pass_obj
+def read(ctx, output, number):
+    '''Get a frequency for read.'''
+    freq = determine_fomat(ctx.inputfile, ctx.name,
+                           ctx.fomat, ctx.mastered)
+    freq = freq[freq.loc[:, 'Freq'] > number]
+    if output != None:
+        freq.to_csv(output, index=False)
+    else:
+        print(freq)
+
+
+@cli.command()
+@click.option('-o', '--output')
+@click.option('-n', '--number', default=3, help='Over freq number.')
+@click.pass_obj
+def dic(ctx, output, number):
+    '''Get a frequency to dictionary, like EuDic.'''
+    freq = determine_fomat(ctx.inputfile, ctx.name,
+                           ctx.fomat, ctx.mastered)
+    freq = freq[freq.loc[:, 'Freq'] > number]
+    if output != None:
+        freq.to_csv(output, index=False,
+                     header=None, columns=['Word'])
+    else:
+        print(freq['Word'])
+
+
+@cli.command()
+@click.option('-o', '--output')
+@click.option('-n', '--number', default=3, help='Over freq number.')
+@click.pass_obj
+def cloud(ctx, output, number):
+    '''Get a wordcloud image.'''
+    freq = determine_fomat(ctx.inputfile, ctx.name,
+                           ctx.fomat, ctx.mastered)
+    freq = freq[freq.loc[:, 'Freq'] > number]
+    freq = freq[['Word', 'Freq']]
+    tuples = [tuple(x) for x in freq.values]
+    wordcloud = WordCloud(
+                max_font_size=60, relative_scaling=.5
+                ).generate_from_frequencies(tuples)
+    plt.figure()
+    plt.imshow(wordcloud)
+    plt.axis("off")
+    if output != None:
+        plt.savefig(output, dpi=300)
+    else:
+        plt.show()
+
+
+@cli.command()
+@click.option('-o', '--output')
+@click.option('-n', '--number', default=3, help='Over freq number.')
+@click.option('--dic', type=click.Choice(['oxf','col']),
+              default='oxf', help='Choice the dictionary.')
+@click.pass_obj
+def mean(ctx, output, number, dic):
+    '''Get the mean of freq words from dictionary.'''
+    freq = determine_fomat(ctx.inputfile, ctx.name,
+                           ctx.fomat, ctx.mastered)
+    freq = freq[freq.loc[:, 'Freq'] > number]
+    if dic == 'oxf':
+        lst = find_oxf_mean(oxf_data, freq)
+        if output != None:
+            with open(output, 'w') as file:
+                file.write('\n\n'.join(lst))
+        else:
+            print('\n\n'.join(lst))
+    else:
+        lst = find_col_mean(col_data, freq)
+        if output != None:
+            with open(output, 'w') as file:
+                file.write('\n\n'.join(lst))
+        else:
+            print('\n\n'.join(lst))
+
+
+cli()
+

@@ -1,0 +1,6 @@
+
+r copied only under the terms of the license agreement. No part of this manual may be photocopied or
+reproduced in any form without prior written consent from The MathWorks, Inc.
+FEDERAL ACQUISITION: This provision applies to all acquisitions of the Program and Documentation
+by, for, or through the federal government of the United States. By accepting delivery of the Program
+or Documentation, the government hereby agrees that this software or documentation qualifies as

@@ -1,0 +1,58 @@
+UseR!
+
+Hadley Wickham
+
+ggplot2
+
+Elegant Graphics for Data Analysis
+ Second Edition 
+
+Use R!
+
+Series Editors:
+Robert Gentleman Kurt Hornik Giovanni Parmigiani
+
+More information about this series at http://www.springer.com/series/6991
+
+Use R!
+
+Moore: Applied Survival Analysis Using R
+Luke: A User’s Guide to Network Analysis in R
+Monogan: Political Analysis Using R
+Cano/M. Moguerza/Prieto Corcoba: Quality Control with R
+Schwarzer/Carpenter/R¨ucker: Meta-Analysis with R
+Gondro: Primer to Analysis of Genomic Data Using R
+Chapman/Feit: R for Marketing Research and Analytics
+Willekens: Multistate Analysis of Life Histories with R
+Cortez: Modern Optimization with R
+Kolaczyk/Cs´ardi: Statistical Analysis of Network Data with R
+Swenson/Nathan: Functional and Phylogenetic Ecology in R
+Nolan/Temple Lang: XML and Web Technologies for Data Sciences with R
+Nagarajan/Scutari/L`ebre: Bayesian Networks in R
+van den Boogaart/Tolosana-Delgado: Analyzing Compositional Data with R
+Bivand/Pebesma/G´omez-Rubio: Applied Spatial Data Analysis with R
+
+(2nd ed. 2013)
+
+Eddelbuettel: Seamless R and C++ Integration with Rcpp
+Knoblauch/Maloney: Modeling Psychophysical Data in R
+Lin/Shkedy/Yekutieli/Amaratunga/Bijnens: Modeling Dose-Response Microarray
+
+Data in Early Drug Development
+Experiments Using R
+
+Cano/M. Moguerza/Redchuk: Six Sigma with R
+Soetaert/Cash/Mazzia: Solving Differential Equations in R
+
+Hadley Wickham
+
+ggplot2
+Elegant Graphics for Data Analysis
+
+Second Edition
+
+With contributions by Carson Sievert
+
+123
+
+
