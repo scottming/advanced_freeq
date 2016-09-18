@@ -10,9 +10,12 @@ $ pip install --editable .
 
 If your system is Mac OS X, you could download calibre by Homebrew.
 
+```
+$ brew cask install calibre
+```
+
 ## Usage:
 
 ```
-$ brew cask install calibre
 $ freeq --help
 ```
