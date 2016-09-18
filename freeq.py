@@ -290,7 +290,7 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 def cli(ctx, inputfile, mastered):
     '''freeq is a script to generate word frequency report of English text/pdf/epub...
 
-    Example:
+    Examples:
 
     \b
         freeq -i tsttxt.pdf dic
