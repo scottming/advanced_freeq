@@ -7,16 +7,16 @@ from collections import Counter
 import pandas as pd
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfpage import PDFPage
 
 if sys.version_info[0] > 2:
     from io import StringIO
 else:
     from io import BytesIO
 
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfpage import PDFPage
 
 dirpath = os.path.dirname(__file__)
 
@@ -35,9 +35,10 @@ def pdf_to_txt(input_book, name):
     password = ""
     maxpages = 0
     caching = True
-    pagenos=set()
-    for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password,
-                                  caching=caching, check_extractable=True):
+    pagenos = set()
+    for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages,
+                                  password=password, caching=caching,
+                                  check_extractable=True):
         interpreter.process_page(page)
     fp.close()
     device.close()
@@ -52,8 +53,7 @@ def other_format_to_txt(input_book):
 
 
 lemmas = {}
-LEM_PATH = os.path.join(os.path.dirname(__file__),
-                       'lemmas.txt')
+LEM_PATH = os.path.join(os.path.dirname(__file__), 'lemmas.txt')
 with open(LEM_PATH) as fin:
     for line in fin:
         line = line.strip()
@@ -213,8 +213,7 @@ def get_freq(input_txt):
 
 def clear_word(input_freq, mastered):
     df_book = pd.read_csv(input_freq)
-    f = lambda x: len(str(x)) > 2
-    df_book = df_book[df_book['Word'].apply(f)]
+    df_book = df_book[df_book['Word'].apply(lambda x: len(str(x)) > 2)]
     df_mastered = pd.read_csv(mastered)
     df_freq = df_book[~df_book['Word'].isin(df_mastered['Word'])]
     return df_freq
@@ -224,6 +223,7 @@ try:
     outcsv = StringIO()
 except NameError:
     outcsv = BytesIO()
+
 
 def determine_fomat(inputfile, name, fomat, mastered):
     if fomat == 'pdf':
@@ -241,19 +241,20 @@ def determine_fomat(inputfile, name, fomat, mastered):
 
 
 COL_PATH = os.path.join(os.path.dirname(__file__),
-                       'dictionary/En-Ch_CollinsCOBUILD.txt')
+                        'dictionary/En-Ch_CollinsCOBUILD.txt')
 with open(COL_PATH) as myfile:
         col_data = myfile.read()
+
+
 def find_col_mean(dic_data, freq_data):
 
     p = re.compile(r'\n\n\n\n')
-    d = p.split(dic_data) # apply words
+    d = p.split(dic_data)  # apply words
     df_dic = pd.DataFrame(d, columns=['Meaning'])
     df_dic['Word'] = df_dic.Meaning.str.extract('(★☆☆\s\s\s.*)\n', expand=False)  # extract the words line
 
     df_dic = df_dic.loc[:, ['Word', 'Meaning']]
-    f = lambda x: str(x)[6:]
-    df_dic['Word'] = df_dic.Word.apply(f)  # deep extract
+    df_dic['Word'] = df_dic.Word.apply(lambda x: str(x)[6:])  # deep extract
 
     mean_data = pd.merge(df_dic, freq_data, on='Word').sort_values(
                         ['Freq', 'Word'], ascending=False)
@@ -262,26 +263,29 @@ def find_col_mean(dic_data, freq_data):
 
 
 OXF_PATH = os.path.join(os.path.dirname(__file__),
-                       'dictionary/En-Ch_Oxford_Advanced_Leaners_Dictionary.txt')
+                        'dictionary/En-Ch_Oxford_Advanced_Leaners_Dictionary.txt')
 with open(OXF_PATH) as myfile1:
         oxf_data = myfile1.read()
+
+
 def find_oxf_mean(dic_data, freq_data):
 
     p = re.compile(r'\n\n\n')
-    d = p.split(dic_data) # apply words
+    d = p.split(dic_data)  # apply words
     df_dic = pd.DataFrame(d, columns=['Meaning'])
     df_dic['Word'] = df_dic.Meaning.str.extract('(★☆☆\s\s\s.*)\n', expand=False)  # extract the words line
 
     df_dic = df_dic.loc[:, ['Word', 'Meaning']]
-    f = lambda x: str(x)[6:]
-    df_dic['Word'] = df_dic.Word.apply(f) # deep extract
+    df_dic['Word'] = df_dic.Word.apply(lambda x: str(x)[6:])  # deep extract
 
     mean_data = pd.merge(df_dic, freq_data, on='Word').sort_values(
                         ['Freq', 'Word'], ascending=False)
     lst = list(mean_data.Meaning.values)
     return lst
 
+
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option('-i', '--inputfile')
@@ -316,7 +320,7 @@ def read(ctx, output, number):
     freq = determine_fomat(ctx.inputfile, ctx.name,
                            ctx.fomat, ctx.mastered)
     freq = freq[freq.loc[:, 'Freq'] > number]
-    if output != None:
+    if output is not None:
         freq.to_csv(output, index=False)
     else:
         print(freq)
@@ -331,9 +335,9 @@ def dic(ctx, output, number):
     freq = determine_fomat(ctx.inputfile, ctx.name,
                            ctx.fomat, ctx.mastered)
     freq = freq[freq.loc[:, 'Freq'] > number]
-    if output != None:
+    if output is not None:
         freq.to_csv(output, index=False,
-                     header=None, columns=['Word'])
+                    header=None, columns=['Word'])
     else:
         print(freq['Word'])
 
@@ -355,7 +359,7 @@ def cloud(ctx, output, number):
     plt.figure()
     plt.imshow(wordcloud)
     plt.axis("off")
-    if output != None:
+    if output is not None:
         plt.savefig(output, dpi=300)
     else:
         plt.show()
@@ -364,7 +368,7 @@ def cloud(ctx, output, number):
 @cli.command()
 @click.option('-o', '--output')
 @click.option('-n', '--number', default=3, help='Over freq number.')
-@click.option('--dic', type=click.Choice(['oxf','col']),
+@click.option('--dic', type=click.Choice(['oxf', 'col']),
               default='oxf', help='Choice the dictionary.')
 @click.pass_obj
 def mean(ctx, output, number, dic):
@@ -374,14 +378,14 @@ def mean(ctx, output, number, dic):
     freq = freq[freq.loc[:, 'Freq'] > number]
     if dic == 'oxf':
         lst = find_oxf_mean(oxf_data, freq)
-        if output != None:
+        if output is not None:
             with open(output, 'w') as file:
                 file.write('\n\n'.join(lst))
         else:
             print('\n\n'.join(lst))
     else:
         lst = find_col_mean(col_data, freq)
-        if output != None:
+        if output is not None:
             with open(output, 'w') as file:
                 file.write('\n\n'.join(lst))
         else:
@@ -389,4 +393,3 @@ def mean(ctx, output, number, dic):
 
 
 cli()
-
