@@ -3,10 +3,10 @@ import re
 import string
 import sys
 import os
-from collections import Counter
-import pandas as pd
-from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import pandas as pd
+from collections import Counter
+from wordcloud import WordCloud
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
@@ -189,11 +189,11 @@ class Book(object):
 
 class Op(object):
     '''Option Class'''
-    def __init__(self, inputfile, mastered=None,
+    def __init__(self, input, mastered=None,
                  s=None, name=None, fomat=None):
-        self.inputfile = inputfile
+        self.input = input
         self.mastered = mastered
-        self.s = self.inputfile.split('.')
+        self.s = self.input.split('.')
         self.name = '.'.join(self.s[:-1])  # bookname
         self.fomat = self.s[-1]  # bookformat
 
@@ -225,13 +225,14 @@ except NameError:
     outcsv = BytesIO()
 
 
-def determine_fomat(inputfile, name, fomat, mastered):
+def determine_fomat(input, name, fomat, mastered):
+    """Determine the format of book filename."""
     if fomat == 'pdf':
-        pdf_to_txt(inputfile, name)
+        pdf_to_txt(input, name)
     elif fomat == 'txt':
         pass
     else:
-        other_format_to_txt(inputfile)
+        other_format_to_txt(input)
 
     meta_freq = get_freq(name + '.txt')
     outcsv.write(meta_freq)
@@ -240,32 +241,41 @@ def determine_fomat(inputfile, name, fomat, mastered):
     return freq
 
 
-COL_PATH = os.path.join(os.path.dirname(__file__),
-                        'dictionary/En-Ch_CollinsCOBUILD.txt')
-with open(COL_PATH) as myfile:
-        col_data = myfile.read()
+def get_coca_rank(df):
+    """Get the rank of words from coca frequency."""
+    cocapath = os.path.join(os.path.dirname(__file__),
+                        'data/coca60k_WB_speech.csv')
+    df_coca60k = pd.read_csv(cocapath).rename(columns={'words': 'Word'})
+    df_rank = pd.merge(df_coca60k, df, on='Word', how='right').sort_values('rank')
+    return df_rank
 
 
-def find_col_mean(dic_data, freq_data):
-
-    p = re.compile(r'\n\n\n\n')
-    d = p.split(dic_data)  # apply words
-    df_dic = pd.DataFrame(d, columns=['Meaning'])
-    df_dic['Word'] = df_dic.Meaning.str.extract('(★☆☆\s\s\s.*)\n', expand=False)  # extract the words line
-
-    df_dic = df_dic.loc[:, ['Word', 'Meaning']]
-    df_dic['Word'] = df_dic.Word.apply(lambda x: str(x)[6:])  # deep extract
-
-    mean_data = pd.merge(df_dic, freq_data, on='Word').sort_values(
-                        ['Freq', 'Word'], ascending=False)
-    lst = list(mean_data.Meaning.values)
-    return lst
+# COL_PATH = os.path.join(os.path.dirname(__file__),
+#                         'dictionary/En-Ch_CollinsCOBUILD.txt')
+# with open(COL_PATH) as myfile:
+#         col_data = myfile.read()
 
 
-OXF_PATH = os.path.join(os.path.dirname(__file__),
-                        'dictionary/En-Ch_Oxford_Advanced_Leaners_Dictionary.txt')
-with open(OXF_PATH) as myfile1:
-        oxf_data = myfile1.read()
+# def find_col_mean(dic_data, freq_data):
+
+#     p = re.compile(r'\n\n\n\n')
+#     d = p.split(dic_data)  # apply words
+#     df_dic = pd.DataFrame(d, columns=['Meaning'])
+#     df_dic['Word'] = df_dic.Meaning.str.extract('(★☆☆\s\s\s.*)\n', expand=False)  # extract the words line
+
+#     df_dic = df_dic.loc[:, ['Word', 'Meaning']]
+#     df_dic['Word'] = df_dic.Word.apply(lambda x: str(x)[6:])  # deep extract
+
+#     mean_data = pd.merge(df_dic, freq_data, on='Word').sort_values(
+#                         ['Freq', 'Word'], ascending=False)
+#     lst = list(mean_data.Meaning.values)
+#     return lst
+
+
+# OXF_PATH = os.path.join(os.path.dirname(__file__),
+#                         'dictionary/En-Ch_Oxford_Advanced_Leaners_Dictionary.txt')
+# with open(OXF_PATH) as myfile1:
+#         oxf_data = myfile1.read()
 
 
 def find_oxf_mean(dic_data, freq_data):
@@ -288,69 +298,90 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
-@click.option('-i', '--inputfile')
-@click.option('-m', '--mastered', default=dirpath + '/mastered.csv')
+@click.option('-i', '--input',
+    help='Set filename of the book.')
 @click.pass_context
-def cli(ctx, inputfile, mastered):
+def cli(ctx, input):
     '''freeq is a script to generate word frequency report of English text/pdf/epub...
 
     Examples:
 
     \b
-        freeq -i tsttxt.pdf dic
-        freeq -i tstpdf.txt mean
+        freeq -i tsttxt.pdf fordict
+        freeq -i tstpdf.txt forread
 
     \b
-        freeq -i tsttxt.txt dic  -o out.txt
-        freeq -i tstpdf.pdf mean -o out.txt
+        freeq -i tsttxt.txt fordict -o out.txt
+        freeq -i tstpdf.pdf forread -o out.csv
 
     \b
-        freeq -i tsttxt.txt dic  -n 2 -o out.txt
-        freeq -i tstpdf.pdf meen -n 2 -o out.txt
+        freeq -i tsttxt.txt fordict -n 2 -o out.txt
+        freeq -i tstpdf.pdf forread -n 2 -o out.txt -p
     '''
-    ctx.obj = Op(inputfile, mastered)
+    ctx.obj = Op(input)
 
 
-@cli.command()
-@click.option('-o', '--output')
-@click.option('-n', '--number', default=3, help='Over freq number.')
+@cli.command('forread')
+@click.option('-o', '--output', help='Set output filename.')
+@click.option('-m', '--mastered-words',
+    default=dirpath + '/mastered.csv',
+    help='Set filename of words list that you have mastered.')
+@click.option('-n', '--over-number', default=3,
+    help='Set over frequent number.')
+@click.option('-p', '--phonetic', is_flag=True)
 @click.pass_obj
-def read(ctx, output, number):
-    '''Get a frequency for read.'''
-    freq = determine_fomat(ctx.inputfile, ctx.name,
-                           ctx.fomat, ctx.mastered)
-    freq = freq[freq.loc[:, 'Freq'] > number]
-    if output is not None:
-        freq.to_csv(output, index=False)
+def read(ctx, output, over_number, mastered_words, phonetic):
+    '''Get a file of frequent words for reading.'''
+    freq = determine_fomat(ctx.input, ctx.name,
+                           ctx.fomat, mastered_words)
+    freq = freq[freq.loc[:, 'Freq'] > over_number]
+    if phonetic:
+        freq = get_coca_rank(freq)
+        if output is not None:
+            freq.to_csv(output, index=False)
+        else:
+            freq.to_csv(sys.stdout, index=False)
     else:
-        print(freq)
+        if output is not None:
+            freq.to_csv(output, index=False)
+        else:
+            freq.to_csv(sys.stdout, index=False)
 
 
-@cli.command()
-@click.option('-o', '--output')
-@click.option('-n', '--number', default=3, help='Over freq number.')
+@cli.command('fordict')
+@click.option('-o', '--output', help='Set output filename.')
+@click.option('-m', '--mastered-words',
+    default=dirpath + '/mastered.csv',
+    help='Set filename of words list that you have mastered.')
+@click.option('-n', '--over-number', default=3,
+    help='Set over frequent number.')
 @click.pass_obj
-def dic(ctx, output, number):
-    '''Get a frequency to dictionary, like EuDic.'''
-    freq = determine_fomat(ctx.inputfile, ctx.name,
-                           ctx.fomat, ctx.mastered)
-    freq = freq[freq.loc[:, 'Freq'] > number]
+def dic(ctx, output, over_number, mastered_words):
+    '''Get frequent words for dictionary to import, like EuDic.'''
+    freq = determine_fomat(ctx.input, ctx.name,
+                           ctx.fomat, mastered_words)
+    freq = freq[freq.loc[:, 'Freq'] > over_number]
     if output is not None:
         freq.to_csv(output, index=False,
                     header=None, columns=['Word'])
     else:
-        print(freq['Word'])
+        freq.to_csv(sys.stdout, index=False,
+                    header=None, columns=['Word'])
 
 
-@cli.command()
-@click.option('-o', '--output')
-@click.option('-n', '--number', default=3, help='Over freq number.')
+@cli.command('outimage')
+@click.option('-o', '--output', help='Set output filename.')
+@click.option('-m', '--mastered-words',
+    default=dirpath + '/mastered.csv',
+    help='Set filename of words list that you have mastered.')
+@click.option('-n', '--over-number', default=3,
+    help='Set over frequent number.')
 @click.pass_obj
-def cloud(ctx, output, number):
+def cloud(ctx, output, over_number, mastered_words):
     '''Get a wordcloud image.'''
-    freq = determine_fomat(ctx.inputfile, ctx.name,
-                           ctx.fomat, ctx.mastered)
-    freq = freq[freq.loc[:, 'Freq'] > number]
+    freq = determine_fomat(ctx.input, ctx.name,
+                           ctx.fomat, mastered_words)
+    freq = freq[freq.loc[:, 'Freq'] > over_number]
     freq = freq[['Word', 'Freq']]
     tuples = [tuple(x) for x in freq.values]
     wordcloud = WordCloud(
@@ -365,31 +396,31 @@ def cloud(ctx, output, number):
         plt.show()
 
 
-@cli.command()
-@click.option('-o', '--output')
-@click.option('-n', '--number', default=3, help='Over freq number.')
-@click.option('--dic', type=click.Choice(['oxf', 'col']),
-              default='oxf', help='Choice the dictionary.')
-@click.pass_obj
-def mean(ctx, output, number, dic):
-    '''Get the mean of freq words from dictionary.'''
-    freq = determine_fomat(ctx.inputfile, ctx.name,
-                           ctx.fomat, ctx.mastered)
-    freq = freq[freq.loc[:, 'Freq'] > number]
-    if dic == 'oxf':
-        lst = find_oxf_mean(oxf_data, freq)
-        if output is not None:
-            with open(output, 'w') as file:
-                file.write('\n\n'.join(lst))
-        else:
-            print('\n\n'.join(lst))
-    else:
-        lst = find_col_mean(col_data, freq)
-        if output is not None:
-            with open(output, 'w') as file:
-                file.write('\n\n'.join(lst))
-        else:
-            print('\n\n'.join(lst))
+# @cli.command('outmeans')
+# @click.option('-o', '--output')
+# @click.option('-n', '--number', default=3, help='Over frequent number.')
+# @click.option('--dic', type=click.Choice(['oxf', 'col']),
+#               default='oxf', help='Choice the dictionary.')
+# @click.pass_obj
+# def mean(ctx, output, number, dic):
+#     '''Get the mean of freq words from dictionary.'''
+#     freq = determine_fomat(ctx.input, ctx.name,
+#                            ctx.fomat)
+#     freq = freq[freq.loc[:, 'Freq'] > number]
+#     if dic == 'oxf':
+#         lst = find_oxf_mean(oxf_data, freq)
+#         if output is not None:
+#             with open(output, 'w') as file:
+#                 file.write('\n\n'.join(lst))
+#         else:
+#             print('\n\n'.join(lst))
+#     else:
+#         lst = find_col_mean(col_data, freq)
+#         if output is not None:
+#             with open(output, 'w') as file:
+#                 file.write('\n\n'.join(lst))
+#         else:
+#             print('\n\n'.join(lst))
 
 
 cli()
